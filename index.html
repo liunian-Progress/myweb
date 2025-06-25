@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>流年的博客 | 个人创意空间</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff6b6b;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --transition: all 0.4s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .navbar.scrolled {
+            padding: 10px 0;
+            background: rgba(26, 26, 46, 0.98);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            margin-left: 15px;
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+        
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(255, 107, 107, 0.4);
+        }
+        
+        /* 内容区域 */
+        .section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            display: inline-block;
+            padding-bottom: 15px;
+            position: relative;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        /* 博客卡片 */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-img {
+            height: 220px;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .card-content {
+            padding: 25px;
+        }
+        
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .card-tag {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .card-excerpt {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+        
+        .card-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+        
+        .card-link i {
+            margin-left: 5px;
+            transition: var(--transition);
+        }
+        
+        .card-link:hover {
+            color: var(--secondary);
+        }
+        
+        .card-link:hover i {
+            transform: translateX(5px);
+        }
+        
+        /* 关于我区域 */
+        .about {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+        }
+        
+        .about .section-title h2 {
+            color: white;
+        }
+        
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 30px;
+            border: 5px solid var(--accent);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+        }
+        
+        .profile-name {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .profile-title {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 25px;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 20px 15px;
+            border-radius: 15px;
+            transition: var(--transition);
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.4rem;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        
+        .social-link:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transform: translateY(-5px);
+        }
+        
+        .about-content {
+            padding: 20px;
+        }
+        
+        .about-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--accent);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .about-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .about-text {
+            margin-bottom: 30px;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .personal-info {
+            margin: 30px 0;
+        }
+        
+        .info-item {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .info-label {
+            width: 120px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .info-value {
+            flex: 1;
+        }
+        
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .interest-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .interest-tag:hover {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transform: translateY(-3px);
+        }
+        
+        /* 时间线 */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 50px;
+            width: calc(50% - 40px);
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: calc(50% + 40px);
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: 4px solid white;
+            box-shadow: 0 0 0 4px var(--primary);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -52px;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -52px;
+        }
+        
+        .timeline-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .timeline-date {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        /* 技能展示 */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .skill-category {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .skill-category h3 {
+            margin-bottom: 20px;
+            color: var(--dark);
+            font-size: 1.5rem;
+        }
+        
+        .skill-item {
+            margin-bottom: 20px;
+        }
+        
+        .skill-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .skill-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 5px;
+            width: 0;
+            transition: width 1.5s ease;
+        }
+        
+        /* 联系表单 */
+        .contact {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+        }
+        
+        .contact .section-title h2 {
+            color: white;
+        }
+        
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+        }
+        
+        .contact-form {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: block;
+            width: 100%;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(106, 17, 203, 0.3);
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .info-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .info-content h4 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        /* 页脚 */
+        .footer {
+            background: url('./imgs/logo.jpg') center/cover;
+            color: white;
+            padding: 80px 0 30px;
+            position: relative;
+        }
+        
+        .footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 26, 46, 0.9);
+        }
+        
+        .footer-content {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-block;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .social-links {
+            display: flex;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transform: translateY(-5px);
+        }
+        
+        .footer-bottom {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .about-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline:before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                padding-left: 70px;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-dot,
+            .timeline-item:nth-child(even) .timeline-dot {
+                left: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .section {
+                padding: 70px 0;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 导航栏 -->
+        <nav class="navbar" :class="{'scrolled': scrolled}">
+            <div class="nav-container">
+                <a href="#" class="logo">流年的<span>博客</span></a>
+                <ul class="nav-links">
+                    <li><a href="#home">首页</a></li>
+                    <li><a href="#blog">博客</a></li>
+                    <li><a href="#about">关于我</a></li>
+                    <li><a href="#skills">技能</a></li>
+                    <li><a href="#contact">联系</a></li>
+                    <img :src="'./imgs/logo.jpg'" alt="用户头像" class="avatar">
+                </ul>
+            </div>
+        </nav>
+
+        <!-- 英雄区域 -->
+        <section class="hero" id="home">
+            <div id="particles-js"></div>
+            <div class="hero-content">
+                <h1>探索创意与技术的边界</h1>
+                <p>分享我的编程旅程、设计思考和生活感悟</p>
+                <a href="#blog" class="cta-button">阅读博客</a>
+            </div>
+        </section>
+
+        <!-- 博客区域 -->
+        <section class="section" id="blog">
+            <div class="container">
+                <div class="section-title">
+                    <h2>最新文章</h2>
+                </div>
+                <div class="blog-grid">
+                    <div class="blog-card animate" v-for="(post, index) in blogPosts" :key="index">
+                        <div class="card-img" :style="{'background-image': 'url(' + post.image + ')'}"></div>
+                        <div class="card-content">
+                            <div class="card-meta">
+                                <span>{{ post.date }}</span>
+                                <span class="card-tag">{{ post.category }}</span>
+                            </div>
+                            <h3 class="card-title">{{ post.title }}</h3>
+                            <p class="card-excerpt">{{ post.excerpt }}</p>
+                            <a href="#" class="card-link">阅读更多 <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我区域 -->
+        <section class="section about" id="about">
+            <div class="container">
+                <div class="section-title">
+                    <h2>关于我</h2>
+                </div>
+                <div class="about-container">
+                    <div class="profile-card animate">
+                        <img :src="'./imgs/logo.jpg'" alt="个人头像" class="profile-img">
+                        <h2 class="profile-name">不是流年</h2>
+                        <p class="profile-title">Java高级全栈开发者 & UI设计师</p>
+                        <p>热爱创造优雅的代码和令人愉悦的用户体验</p>
+                        
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">1</div>
+                                <div class="stat-label">年经验</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">0</div>
+                                <div class="stat-label">项目</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">0</div>
+                                <div class="stat-label">客户</div>
+                            </div>
+                        </div>
+                        
+                        <div class="social-links">
+                            <a href="https://github.com/liunian-Progress" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
+                            <a href="https://x.com/qqliunian?s=09" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.qlu.edu.cn/" target="_blank" class="social-link"><i class="fas fa-graduation-cap"></i></a>
+                            <a href="https://www.facebook.com/profile.php?id=61561109563867&mibextid=ZbWKwL" target="_blank" class="social-link"><i class="fab fa-facebook"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="about-content animate">
+                        <h3 class="about-title">个人简介</h3>
+                        <p class="about-text">
+                            我只是一名普通的学生,践行做技术的追求者,热爱者。
+                        </p>
+                        <p class="about-text">
+                            我的技术栈涵盖了前端开发（Vue.js, React, HTML5, CSS3）和后端开发（Node.js, Express, MongoDB）。同时，我也热衷于UI/UX设计，使用Figma和Adobe XD创建美观且功能强大的界面。
+                        </p>
+                        
+                        <div class="personal-info">
+                            <h3 class="about-title">个人信息</h3>
+                            <div class="info-item">
+                                <span class="info-label">姓名：</span>
+                                <span class="info-value">不是流年</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">邮箱：</span>
+                                <span class="info-value">2336173789@qq.com</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">电话：</span>
+                                <span class="info-value">+86 155 6250 6270</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">地址：</span>
+                                <span class="info-value">山东,中国</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">职位：</span>
+                                <span class="info-value">Java高级全栈开发者</span>
+                            </div>
+                        </div>
+                        
+                        <h3 class="about-title">兴趣爱好</h3>
+                        <div class="interests">
+                            <span class="interest-tag">摄影</span>
+                            <span class="interest-tag">旅行</span>
+                            <span class="interest-tag">开源项目</span>
+                            <span class="interest-tag">科技阅读</span>
+                            <span class="interest-tag">登山</span>
+                            <span class="interest-tag">咖啡文化</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 时间线 -->
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>我的历程</h2>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item animate" v-for="(item, index) in timeline" :key="index">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">{{ item.date }}</div>
+                            <h3>{{ item.title }}</h3>
+                            <p>{{ item.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技能展示 -->
+        <section class="section" id="skills">
+            <div class="container">
+                <div class="section-title">
+                    <h2>技术能力</h2>
+                </div>
+                <div class="skills-container">
+                    <div class="skill-category animate">
+                        <h3>前端技术</h3>
+                        <div class="skill-item" v-for="(skill, index) in frontendSkills" :key="'front-'+index">
+                            <div class="skill-info">
+                                <span>{{ skill.name }}</span>
+                                <span>{{ skill.level }}%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" :style="{'width': skill.level + '%'}"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-category animate">
+                        <h3>后端技术</h3>
+                        <div class="skill-item" v-for="(skill, index) in backendSkills" :key="'back-'+index">
+                            <div class="skill-info">
+                                <span>{{ skill.name }}</span>
+                                <span>{{ skill.level }}%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" :style="{'width': skill.level + '%'}"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-category animate">
+                        <h3>设计工具</h3>
+                        <div class="skill-item" v-for="(skill, index) in designSkills" :key="'design-'+index">
+                            <div class="skill-info">
+                                <span>{{ skill.name }}</span>
+                                <span>{{ skill.level }}%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" :style="{'width': skill.level + '%'}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系表单 -->
+        <section class="section contact" id="contact">
+            <div class="container">
+                <div class="section-title">
+                    <h2>联系我</h2>
+                </div>
+                <div class="contact-container">
+                    <div class="contact-form animate">
+                        <form @submit.prevent="submitForm">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="您的姓名" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" placeholder="您的邮箱" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="主题">
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="您的留言" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">发送消息</button>
+                        </form>
+                    </div>
+                    <div class="contact-info animate">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="info-content">
+                                <h4>地址</h4>
+                                <p>山东省 济南市 长清区 大学路 3501号</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="info-content">
+                                <h4>邮箱</h4>
+                                <p>2336173789@qq.com</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="info-content">
+                                <h4>电话</h4>
+                                <p>+86 155 6250 6270</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-column">
+                        <h3>关于博客</h3>
+                        <p>流年的博客是一个分享技术、设计和生活思考的个人空间，记录我的学习和成长历程。</p>
+                        <div class="social-links">
+                            <a href="https://github.com/liunian-Progress" target="_blank"><i class="fab fa-github"></i></a>
+                            <a href="https://x.com/qqliunian?s=09" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.qlu.edu.cn/" target="_blank"><i class="fas fa-graduation-cap"></i></a>
+                            <a href="https://www.facebook.com/profile.php?id=61561109563867&mibextid=ZbWKwL" target="_blank"><i class="fab fa-facebook"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-column">
+                        <h3>快速链接</h3>
+                        <ul class="footer-links">
+                            <li><a href="#home">首页</a></li>
+                            <li><a href="#blog">博客</a></li>
+                            <li><a href="#about">关于我</a></li>
+                            <li><a href="#skills">技能</a></li>
+                            <li><a href="#contact">联系</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>博客分类</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">前端开发</a></li>
+                            <li><a href="#">后端技术</a></li>
+                            <li><a href="#">UI/UX设计</a></li>
+                            <li><a href="#">项目管理</a></li>
+                            <li><a href="#">生活随笔</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>订阅更新</h3>
+                        <p>订阅我的博客，获取最新的文章和技术分享。</p>
+                        <div class="form-group" style="margin-top: 20px;">
+                            <input type="email" class="form-control" placeholder="您的邮箱地址">
+                            <button class="submit-btn" style="margin-top: 15px;">订阅</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 流年博客. 保留所有权利 | 设计制作: 流年</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                scrolled: false,
+                blogPosts: [
+                    {
+                        title: "Vue 3 组合式API深度探索",
+                        excerpt: "本文深入探讨Vue 3的组合式API，分析其设计理念和实际应用场景，帮助你更好地使用现代Vue开发模式。",
+                        date: "2023-10-15",
+                        category: "前端开发",
+                        image: "./imgs/Vue3.png"
+                    },
+                    {
+                        title: "CSS Grid布局完全指南",
+                        excerpt: "掌握CSS Grid布局的核心概念和高级技巧，创建响应式网页设计的最佳实践。",
+                        date: "2023-10-08",
+                        category: "前端开发",
+                        image: "./imgs/CSSGrid.jpeg"
+                    },
+                    {
+                        title: "用户体验设计的心理学原理",
+                        excerpt: "探索影响用户行为的心理学原理，以及如何将这些知识应用到产品设计中，创造更优秀的用户体验。",
+                        date: "2023-09-28",
+                        category: "UI/UX设计",
+                        image: "./imgs/用户体验设计的心理学原理.png"
+                    }
+                ],
+                timeline: [
+                    {
+                        date: "2019 - 2020",
+                        title: "学习前端基础",
+                        description: "开始系统学习HTML、CSS和JavaScript，完成多个小型网页项目。"
+                    },
+                    {
+                        date: "2020 - 2021",
+                        title: "掌握Vue.js框架",
+                        description: "深入学习Vue.js及其生态系统，包括Vue Router、Vuex等。"
+                    },
+                    {
+                        date: "2021 - 2022",
+                        title: "全栈开发实践",
+                        description: "学习Node.js和Express框架，实现前后端分离的全栈项目开发。"
+                    },
+                    {
+                        date: "2022 - 至今",
+                        title: "UI/UX设计探索",
+                        description: "研究用户体验设计原则，将设计思维融入开发流程中。"
+                    }
+                ],
+                frontendSkills: [
+                    { name: "HTML5/CSS3", level: 95 },
+                    { name: "JavaScript", level: 90 },
+                    { name: "Vue.js", level: 85 },
+                    { name: "React", level: 80 },
+                    { name: "响应式设计", level: 90 }
+                ],
+                backendSkills: [
+                    { name: "Node.js", level: 85 },
+                    { name: "Express", level: 80 },
+                    { name: "MongoDB", level: 75 },
+                    { name: "RESTful API", level: 85 }
+                ],
+                designSkills: [
+                    { name: "Figma", level: 90 },
+                    { name: "Adobe XD", level: 85 },
+                    { name: "UI设计原则", level: 80 },
+                    { name: "用户体验", level: 85 }
+                ]
+            },
+            mounted() {
+                // 初始化粒子效果
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 80, density: { enable: true, value_area: 800 } },
+                        color: { value: "#ffffff" },
+                        shape: { type: "circle" },
+                        opacity: { value: 0.5, random: true },
+                        size: { value: 5, random: true },
+                        line_linked: {
+                            enable: true,
+                            distance: 150,
+                            color: "#ffffff",
+                            opacity: 0.4,
+                            width: 1
+                        },
+                        move: {
+                            enable: true,
+                            speed: 2,
+                            direction: "none",
+                            random: true,
+                            straight: false,
+                            out_mode: "out"
+                        }
+                    },
+                    interactivity: {
+                        detect_on: "canvas",
+                        events: {
+                            onhover: { enable: true, mode: "grab" },
+                            onclick: { enable: true, mode: "push" }
+                        }
+                    }
+                });
+                
+                // 滚动事件监听
+                window.addEventListener('scroll', this.handleScroll);
+                
+                // 滚动动画
+                this.initAnimations();
+            },
+            methods: {
+                handleScroll() {
+                    this.scrolled = window.scrollY > 50;
+                },
+                initAnimations() {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('visible');
+                                
+                                // 技能条动画
+                                if (entry.target.classList.contains('skill-category')) {
+                                    setTimeout(() => {
+                                        const progressBars = entry.target.querySelectorAll('.skill-progress');
+                                        progressBars.forEach(bar => {
+                                            bar.style.width = bar.parentElement.previousElementSibling.children[1].textContent;
+                                        });
+                                    }, 300);
+                                }
+                            }
+                        });
+                    }, { threshold: 0.1 });
+                    
+                    document.querySelectorAll('.animate').forEach(el => {
+                        observer.observe(el);
+                    });
+                },
+                submitForm() {
+                    this.$notify({
+                        title: '成功',
+                        message: '您的消息已发送，我会尽快回复！',
+                        type: 'success'
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
